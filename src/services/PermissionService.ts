@@ -1,6 +1,5 @@
 import { Inject, Service, EventManager } from "@kaviar/core";
 import { PermissionGraph } from "./PermissionGraph";
-import { IPermissionManipulation } from "../defs";
 import {
   UserBeforeRemovePermissionEvent,
   UserAfterRemovePermissionEvent,
@@ -14,7 +13,6 @@ import {
   IPermissionService,
   IPermission,
   IPermissionSearchFilter,
-  IPermissionSearch,
   IPermissionSearchFilters,
 } from "../defs";
 import { PERMISSION_PERSISTANCE_LAYER } from "../constants";
@@ -50,7 +48,7 @@ export class PermissionService implements IPermissionService {
     return result > 0;
   }
 
-  async add(permission: IPermissionManipulation) {
+  async add(permission: IPermission) {
     await this.eventManager.emit(
       new UserBeforeAddPermissionEvent({
         permission,
@@ -118,7 +116,10 @@ export class PermissionService implements IPermissionService {
    * Prepares your easy search and transforms it so it reaches persistance layers properly
    * @param object
    */
-  protected transformToFilters(object): IPermissionSearchFilters {
+  protected transformToFilters(
+    object,
+    adaptToDefaultDomain: boolean = true
+  ): IPermissionSearchFilters {
     const newObject = {};
     ["userId", "permission", "domain", "domainIdentifier"].forEach((key) => {
       if (object[key]) {

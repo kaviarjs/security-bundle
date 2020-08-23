@@ -35,8 +35,14 @@ export const Mocks = {
 
 export function createTests(testDefinitions, injectionCreator) {
   testDefinitions.forEach(({ message, test, only }) => {
-    it(message, async () => {
-      await test(injectionCreator());
-    });
+    if (only) {
+      it.only(message, async () => {
+        await test(injectionCreator());
+      });
+    } else {
+      it(message, async () => {
+        await test(injectionCreator());
+      });
+    }
   });
 }

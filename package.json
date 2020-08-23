@@ -1,7 +1,8 @@
 {
   "name": "@kaviar/security-bundle",
   "version": "1.0.0",
-  "description": "Kaviar Security Bundle",
+  "private": true,
+  "description": "Security solution for Kaviar Framework.",
   "main": "dist/index.js",
   "repository": {
     "type": "git",

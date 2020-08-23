@@ -4,12 +4,12 @@ import {
   BundlePhase,
   EventManager,
   KernelAfterInitEvent,
+  Constructor,
 } from "@kaviar/core";
 import {
   IUserPersistance,
   IPermissionPersistance,
   ISecurityBundleConfig,
-  Constructor,
 } from "./defs";
 import {
   USER_PERSISTANCE_LAYER,
@@ -25,7 +25,6 @@ import { SessionPersistanceService } from "./__tests__/services/mocks/SessionPer
 import { PermissionsPersistanceService } from "./__tests__/services/mocks/PermissionsPersistanceService.mock";
 
 export class SecurityBundle extends Bundle<ISecurityBundleConfig> {
-  // TODO think about these default mocks better
   protected defaultConfig = {
     userPersistance: UserPersistanceService,
     sessionPersistance: SessionPersistanceService,

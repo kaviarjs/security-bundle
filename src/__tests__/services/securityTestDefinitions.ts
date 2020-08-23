@@ -34,7 +34,7 @@ export const securityTestDefinitions = [
       const tokenData = await securityService.getSession(token);
 
       assert.equal(tokenData.userId.toString(), userId.toString());
-      assert.equal(tokenData.a, "TEST");
+      assert.equal(tokenData.data?.a, "TEST");
     },
   },
   {

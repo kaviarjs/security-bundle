@@ -1,7 +1,9 @@
+import { Constructor } from "@kaviar/core";
+
 export interface ISecurityBundleConfig {
-  userPersistance?: { new (...args: any[]): IUserPersistance };
-  sessionPersistance?: { new (...args: any[]): ISessionPersistance };
-  permissionPersistance?: { new (...args: any[]): IPermissionPersistance };
+  userPersistance?: Constructor<IUserPersistance>;
+  sessionPersistance?: Constructor<ISessionPersistance>;
+  permissionPersistance?: Constructor<IPermissionPersistance>;
   permissionTree?: IPermissionTree;
   session?: {
     expiresIn?: string;
@@ -10,18 +12,11 @@ export interface ISecurityBundleConfig {
   };
 }
 
-export interface Constructor<T> {
-  new (...args: any[]): T;
-}
-
 export interface IUser {
   _id?: any;
   isEnabled: boolean;
   createdAt: Date;
   lastLoginAt?: Date;
-
-  // And others
-  [key: string]: any;
 }
 
 export interface IFieldMap {
@@ -97,7 +92,7 @@ export interface ISession {
   token: string;
   userId: any;
   expiresAt: Date;
-  [key: string]: any;
+  data?: any;
 }
 
 export interface ISessionPersistance {
@@ -145,17 +140,10 @@ export interface IPermissionSearch {
   domainIdentifier?: string;
 }
 
-export interface IPermissionManipulation {
-  userId: any;
-  permission: string;
-  domain: string;
-  domainIdentifier?: string;
-}
-
 export interface IPermission {
   userId: any;
   permission: string;
-  domain?: string;
+  domain: string;
   domainIdentifier?: string;
 }
 
@@ -164,9 +152,9 @@ export interface IPermissionTree {
 }
 
 export interface IPermissionService {
-  add(permission: IPermissionManipulation): Promise<void>;
-  remove(permission: IPermissionManipulation): Promise<void>;
-  has(permission: IPermissionManipulation): Promise<boolean>;
+  add(permission: IPermission): Promise<void>;
+  remove(permission: IPermission): Promise<void>;
+  has(permission: IPermission): Promise<boolean>;
   findPermissions(search: IPermissionSearchFilter): Promise<IPermission[]>;
   findPermission(search: IPermissionSearchFilter): Promise<IPermission>;
   findDomains(userId: any): Promise<string[]>;

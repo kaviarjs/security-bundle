@@ -11,7 +11,7 @@ export class SessionPersistanceService implements ISessionPersistance {
       token: token,
     };
     if (data) {
-      Object.assign(session, data);
+      Object.assign(session, { data });
     }
     this.db.push(session);
 

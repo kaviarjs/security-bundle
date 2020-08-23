@@ -1,8 +1,6 @@
-import { IPermissionManipulation } from "../../../defs";
 import {
   IPermissionPersistance,
   IPermission,
-  IPermissionSearchFilter,
   IPermissionSearchFilters,
 } from "../../../defs";
 
@@ -13,7 +11,7 @@ export class PermissionsPersistanceService implements IPermissionPersistance {
     this.db = [];
   }
 
-  async insertPermission(permission: IPermissionManipulation) {
+  async insertPermission(permission: IPermission) {
     this.db.push({
       ...permission,
     });
