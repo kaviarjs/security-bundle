@@ -12,12 +12,12 @@
 <br />
 <br />
 
-This bundle does not have any preference for your database, as the persistance layers (for Permissions and Users) are completely decoupled. You can make it work with any database/api later down the road.
+This bundle aims to solve Authentication and Authorization (with included Permission Management & Permissioning Tree Hierarchy) while being fully decoupled from a persistence layer (Database), meaning you can implement your own persistence layers to work with any type of database/API.
 
 ## Install
 
 ```bash
-npm install --save @kaviar/core
+npm install --save @kaviar/security-bundle
 ```
 
 ## [Documentation](./DOCUMENTATION.md)
