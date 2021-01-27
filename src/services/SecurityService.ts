@@ -263,7 +263,7 @@ export class SecurityService implements ISecurityService {
     authMethodName: string,
     data: Partial<T>
   ): Promise<void> {
-    this.userPersistanceLayer.updateAuthenticationStrategyData(
+    return this.userPersistanceLayer.updateAuthenticationStrategyData(
       userId,
       authMethodName,
       data
