@@ -83,11 +83,7 @@ export class PermissionService implements IPermissionService {
   }
 
   /**
-   * All permissions will by default found on the "default" domain which is called "ROOT"
-   * If you want all permissions from all domains use the wildcard (*) as the domain name
-   *
-   * @param userId
-   * @param search
+   * Search permissions
    */
   async findPermissions(
     search: IPermissionSearchFilter = {}
@@ -98,11 +94,7 @@ export class PermissionService implements IPermissionService {
   }
 
   /**
-   * All permissions will by default found on the "default" domain which is called "ROOT"
-   * If you want all permissions from all domains use the wildcard (*) as the domain name
-   *
-   * @param userId
-   * @param search
+   * Finds a single permission
    */
   async findPermission(
     search: IPermissionSearchFilter = {}

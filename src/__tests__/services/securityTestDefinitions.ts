@@ -1,5 +1,4 @@
 import { SecurityService } from "../..";
-import { assert } from "chai";
 import { UserPersistanceService } from "./mocks/UserPersistanceService.mock";
 import { EventManager } from "@kaviar/core";
 import { SessionPersistanceService } from "./mocks/SessionPersistanceService.mock";
@@ -16,7 +15,7 @@ export const securityTestDefinitions = [
       });
 
       user = await securityService.findUserById(userId);
-      assert.equal(user.name, "Hello");
+      expect(user.name).toBe("Hello");
     },
   },
   {
@@ -33,8 +32,8 @@ export const securityTestDefinitions = [
 
       const tokenData = await securityService.getSession(token);
 
-      assert.equal(tokenData.userId.toString(), userId.toString());
-      assert.equal(tokenData.data?.a, "TEST");
+      expect(tokenData.userId.toString()).toBe(userId.toString());
+      expect(tokenData.data?.a).toBe("TEST");
     },
   },
   {
@@ -47,8 +46,9 @@ export const securityTestDefinitions = [
       const tokenData = await securityService.getSession(token);
 
       await securityService.logout(token);
+      const newValue = await securityService.getSession(token);
 
-      return expect(securityService.getSession(token)).resolves.toBe(null);
+      expect(newValue).toBe(null);
     },
   },
 ];

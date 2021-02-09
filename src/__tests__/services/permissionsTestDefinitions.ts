@@ -1,5 +1,4 @@
 import { Permissions, PermissionTree } from "./mocks/permissionTree.mock";
-import { assert } from "chai";
 import { PermissionService, PermissionGraph, IPermissionService } from "../..";
 import { PermissionsPersistanceService } from "./mocks/PermissionsPersistanceService.mock";
 import { EventManager } from "@kaviar/core";
@@ -28,24 +27,24 @@ export const permissionServiceTestDefinitions = [
         domain: PERMISSION_DEFAULT_DOMAIN,
       });
 
-      assert.isTrue(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.ADMIN,
         })
-      );
+      ).toBe(true);
 
       await service.remove({
         userId: "U1",
         permission: Permissions.ADMIN,
       });
 
-      assert.isFalse(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.ADMIN,
         })
-      );
+      ).toBe(false);
     },
   },
   {
@@ -57,24 +56,24 @@ export const permissionServiceTestDefinitions = [
         domain: PERMISSION_DEFAULT_DOMAIN,
       });
 
-      assert.isTrue(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
         })
-      );
+      ).toBe(true);
 
       await service.remove({
         userId: "U1",
         permission: Permissions.ADMIN,
       });
 
-      assert.isFalse(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
         })
-      );
+      ).toBe(false);
     },
   },
   {
@@ -86,39 +85,43 @@ export const permissionServiceTestDefinitions = [
         domain: "Legal",
       });
 
-      assert.isTrue(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.ADMIN,
         })
-      );
-      assert.isTrue(
+      ).toBe(true);
+
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
         })
-      );
-      assert.isFalse(
+      ).toBe(true);
+
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.ADMIN,
           domain: "Health",
         })
-      );
-      assert.isTrue(
+      ).toBe(false);
+
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.ADMIN,
           domain: "Legal",
         })
-      );
-      assert.isTrue(
+      ).toBe(true);
+
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
           domain: "Legal",
         })
-      );
+      ).toBe(true);
     },
   },
   {
@@ -131,31 +134,31 @@ export const permissionServiceTestDefinitions = [
         domainIdentifier: "BLOCK6",
       });
 
-      assert.isTrue(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
           domain: "Legal",
         })
-      );
+      ).toBe(true);
 
-      assert.isFalse(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
           domain: "Legal",
           domainIdentifier: "C4",
         })
-      );
+      ).toBe(false);
 
-      assert.isTrue(
+      expect(
         await service.has({
           userId: "U1",
           permission: Permissions.INVOICE_MANAGEMENT,
           domain: "Legal",
           domainIdentifier: "BLOCK6",
         })
-      );
+      ).toBe(true);
     },
   },
   {
@@ -179,24 +182,24 @@ export const permissionServiceTestDefinitions = [
       permissions = await service.findPermissions({
         userId: "U1",
       });
-      assert.lengthOf(permissions, 2);
+      expect(permissions).toHaveLength(2);
 
       permissions = await service.findPermissions({
         userId: "U1",
         domain: "Legal",
       });
-      assert.lengthOf(permissions, 1);
+      expect(permissions).toHaveLength(1);
 
       permissions = await service.findPermissions({
         userId: "U1",
         domainIdentifier: "BLOCK6",
       });
-      assert.lengthOf(permissions, 2);
+      expect(permissions).toHaveLength(2);
 
       domains = await service.findDomains("U1");
-      assert.lengthOf(domains, 2);
-      assert.include(domains, "Legal");
-      assert.include(domains, "Health");
+      expect(domains).toHaveLength(2);
+      expect(domains.includes("Legal")).toBe(true);
+      expect(domains.includes("Health")).toBe(true);
     },
   },
 ];

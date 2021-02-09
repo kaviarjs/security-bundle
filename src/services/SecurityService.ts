@@ -81,7 +81,7 @@ export class SecurityService implements ISecurityService {
       })
     );
 
-    this.userPersistanceLayer.updateUser(userId, data);
+    await this.userPersistanceLayer.updateUser(userId, data);
 
     await this.eventManager.emit(
       new UserAfterUpdateEvent({
@@ -145,7 +145,7 @@ export class SecurityService implements ISecurityService {
     this.eventManager.emit(new SessionBeforeCreateEvent({ userId, options }));
     const expiresAt = new Date(Date.now() + ms(options.expiresIn));
 
-    const token = this.sessionPersistanceLayer.newSession(
+    const token = await this.sessionPersistanceLayer.newSession(
       userId,
       expiresAt,
       options.data
@@ -195,7 +195,7 @@ export class SecurityService implements ISecurityService {
    * Logging out the user based on userId
    * @param userId
    */
-  async logout(token: any) {
+  async logout(token: string) {
     const session = await this.sessionPersistanceLayer.getSession(token);
 
     if (!session) {
@@ -210,7 +210,7 @@ export class SecurityService implements ISecurityService {
       })
     );
 
-    this.sessionPersistanceLayer.deleteSession(token);
+    await this.sessionPersistanceLayer.deleteSession(token);
 
     await this.eventManager.emit(
       new UserAfterLogoutEvent({

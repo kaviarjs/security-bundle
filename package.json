@@ -27,19 +27,16 @@
     "ms": "^2.1.2"
   },
   "peerDependencies": {
-    "@kaviar/core": "^1.0.1"
+    "@kaviar/core": "^1.1.1"
   },
   "devDependencies": {
-    "@kaviar/core": "^1.0.1",
-    "@types/chai": "^4.2.3",
+    "@kaviar/core": "^1.1.1",
     "@types/chai-as-promised": "^7.1.2",
-    "@types/jest": "^25.2.1",
+    "@types/jest": "^25.2.3",
     "@types/jsonwebtoken": "^8.3.9",
     "@types/node": "^8.0.28",
     "@typescript-eslint/eslint-plugin": "2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "6.3.0",
     "eslint-plugin-prettier": "3.1.1",

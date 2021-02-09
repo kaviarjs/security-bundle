@@ -8,22 +8,19 @@ describe("PermissionGraph", () => {
     const permission = new PermissionGraph(PermissionTree);
 
     const result1 = permission.getParentRolesOf(Permissions.INVOICE_MANAGEMENT);
-    assert.deepEqual(result1, [Permissions.ADMIN]);
+    expect(result1).toHaveLength(1);
+    expect(result1[0]).toBe(Permissions.ADMIN);
 
     const result2 = permission.getParentRolesOf(Permissions.INVOICE_READ);
-    assert.deepEqual(result2, [
-      Permissions.ADMIN,
-      Permissions.INVOICE_MANAGEMENT,
-    ]);
+    expect(result2).toHaveLength(2);
+    expect(result2).toContain(Permissions.ADMIN);
+    expect(result2).toContain(Permissions.INVOICE_MANAGEMENT);
 
     const result3 = permission.getSubRolesOf(Permissions.ADMIN);
-    assert.deepEqual(result3, [
-      Permissions.INVOICE_READ,
-      Permissions.INVOICE_CREATE,
-      Permissions.INVOICE_MARK_AS_PAID,
-      Permissions.INVOICE_MANAGEMENT,
-    ]);
-
-    assert.isTrue(true);
+    expect(result3).toHaveLength(4);
+    expect(result3).toContain(Permissions.INVOICE_READ);
+    expect(result3).toContain(Permissions.INVOICE_CREATE);
+    expect(result3).toContain(Permissions.INVOICE_MARK_AS_PAID);
+    expect(result3).toContain(Permissions.INVOICE_MANAGEMENT);
   });
 });
