@@ -33,14 +33,14 @@ export interface IPermissioning {
   );
 
   findPermission(
-    userId: UserId,
-    permission: string,
+    permission?: string,
+    userId?: UserId,
     domain?: string,
     domainIdentifier?: string
   );
 
   findPermissions(
-    userId: UserId,
+    userId?: UserId,
     permission?: string,
     domain?: string,
     domainIdentifier?: string

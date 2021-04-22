@@ -27,6 +27,10 @@ export class PermissionService implements IPermissionService {
   ) {}
 
   async has(filter: IPermissionSearchFilter): Promise<boolean> {
+    if (filter.userId === null || filter.userId === undefined) {
+      throw new Error(`UserId is required.`);
+    }
+
     const filters = this.transformToFilters(filter);
 
     const permissions = filters.permission;
