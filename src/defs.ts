@@ -11,9 +11,10 @@ export interface ISecurityBundleConfig {
     cleanupInterval?: string;
   };
 }
+export type UserId = number | string | object;
 
 export interface IUser {
-  _id?: any;
+  _id?: UserId;
   isEnabled: boolean;
   createdAt: Date;
   lastLoginAt?: Date;
@@ -22,37 +23,36 @@ export interface IUser {
 export interface IFieldMap {
   [key: string]: number;
 }
-
 export interface IPermissioning {
   addPermission(userPermission: IPermission): any;
   hasPermission(
-    userId: any,
+    userId: UserId,
     permission: string,
     domain?: string,
     domainIdentifier?: string
   );
 
   findPermission(
-    userId: any,
+    userId: UserId,
     permission: string,
     domain?: string,
     domainIdentifier?: string
   );
 
   findPermissions(
-    userId: any,
+    userId: UserId,
     permission?: string,
     domain?: string,
     domainIdentifier?: string
   );
   removePermission(
-    userId: any,
+    userId: UserId,
     permission: string,
     domain?: string,
     domainIdentifier?: string
   );
   removePermissions(
-    userId: any,
+    userId: UserId,
     permission?: string,
     domain?: string,
     domainIdentifier?: string
@@ -65,7 +65,7 @@ export interface IUserPersistance {
   deleteUser(userId): Promise<void>;
 
   findUser(filters, fields?: IFieldMap): Promise<IUser>;
-  findUserById(userId: any, fields?: IFieldMap): Promise<IUser>;
+  findUserById(userId: UserId, fields?: IFieldMap): Promise<IUser>;
 
   findThroughAuthenticationStrategy<T = any>(
     strategyName: string,
@@ -77,12 +77,12 @@ export interface IUserPersistance {
     authenticationStrategyName: string
   ): Promise<void>;
   updateAuthenticationStrategyData<T = any>(
-    userId: any,
+    userId: UserId,
     authenticationStrategyName: string,
     data: Partial<T>
   ): Promise<void>;
   getAuthenticationStrategyData<T = any>(
-    userId: any,
+    userId: UserId,
     authenticationStrategyName: string,
     fields?: IFieldMap
   ): Promise<Partial<T>>;
@@ -90,7 +90,7 @@ export interface IUserPersistance {
 
 export interface ISession {
   token: string;
-  userId: any;
+  userId: UserId;
   expiresAt: Date;
   data?: any;
 }
@@ -103,7 +103,7 @@ export interface ISessionPersistance {
   newSession(userId, expiresAt: Date, data?: any): Promise<string>;
   getSession(token: string): Promise<ISession>;
   deleteSession(token: string): Promise<void>;
-  deleteAllSessionsForUser(userId: any): Promise<void>;
+  deleteAllSessionsForUser(userId: UserId): Promise<void>;
   /**
    * Cleanup old, no longer available, expired tokens
    */
@@ -116,7 +116,7 @@ export interface IPermissionPersistance {
   countPermissions(filters: IPermissionSearchFilters): Promise<number>;
   findPermissions(search: IPermissionSearchFilters): Promise<IPermission[]>;
   findPermission(search: IPermissionSearchFilters): Promise<IPermission>;
-  findDomains(userId: any): Promise<string[]>;
+  findDomains(userId: UserId): Promise<string[]>;
 }
 
 export interface IPermissionSearchFilter {
@@ -141,7 +141,7 @@ export interface IPermissionSearch {
 }
 
 export interface IPermission {
-  userId: any;
+  userId: UserId;
   permission: string;
   domain: string;
   domainIdentifier?: string;
@@ -157,7 +157,7 @@ export interface IPermissionService {
   has(permission: IPermission): Promise<boolean>;
   findPermissions(search: IPermissionSearchFilter): Promise<IPermission[]>;
   findPermission(search: IPermissionSearchFilter): Promise<IPermission>;
-  findDomains(userId: any): Promise<string[]>;
+  findDomains(userId: UserId): Promise<string[]>;
 }
 
 export interface ISecurityService {
@@ -169,16 +169,16 @@ export interface ISecurityService {
   deleteUser(userId): Promise<void>;
 
   findUser(filters, fields?: IFieldMap): Promise<Partial<IUser>>;
-  findUserById(userId: any, fields?: IFieldMap): Promise<Partial<IUser>>;
+  findUserById(userId: UserId, fields?: IFieldMap): Promise<Partial<IUser>>;
 
   login(userId, options: ICreateSessionOptions): Promise<string>;
-  logout(userId: any): Promise<void>;
+  logout(userId: UserId): Promise<void>;
 
   createSession(userId, options?: ICreateSessionOptions): Promise<string>;
   getSession(token): Promise<ISession>;
 
   updateAuthenticationStrategyData<T = any>(
-    userId: any,
+    userId: UserId,
     strategyName: string,
     data: Partial<T>
   ): Promise<void>;
@@ -188,21 +188,21 @@ export interface ISecurityService {
     fields?: IFieldMap
   ): Promise<null | FindAuthenticationStrategyResponse<T>>;
   getAuthenticationStrategyData<T = any>(
-    userId: any,
+    userId: UserId,
     strategyName: string,
     fields?: IFieldMap
   ): Promise<Partial<T>>;
   removeAuthenticationStrategyData(
-    userId: any,
+    userId: UserId,
     strategyName: string
   ): Promise<any>;
-  isUserEnabled(userId: any): Promise<boolean>;
-  enableUser(userId: any): Promise<void>;
-  disableUser(userId: any): Promise<void>;
+  isUserEnabled(userId: UserId): Promise<boolean>;
+  enableUser(userId: UserId): Promise<void>;
+  disableUser(userId: UserId): Promise<void>;
 }
 
 export interface FindAuthenticationStrategyResponse<T = any> {
-  userId: any;
+  userId: UserId;
   strategy: T;
 }
 
