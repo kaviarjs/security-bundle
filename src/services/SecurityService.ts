@@ -164,7 +164,7 @@ export class SecurityService implements ISecurityService {
    * @param options
    */
   async login(userId, options: ICreateSessionOptions): Promise<string> {
-    if (!this.isUserEnabled(userId)) {
+    if (!(await this.isUserEnabled(userId))) {
       throw new UserDisabledException();
     }
 
@@ -354,11 +354,11 @@ export class SecurityService implements ISecurityService {
    * Check if the user is enabled and can login
    * @param userId
    */
-  async isUserEnabled(userId) {
+  async isUserEnabled(userId): Promise<boolean> {
     const user = await this.findUserById(userId, {
       isEnabled: 1,
     });
 
-    return user?.isEnabled;
+    return Boolean(user?.isEnabled);
   }
 }
