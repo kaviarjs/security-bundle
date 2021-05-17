@@ -14,6 +14,14 @@ export class PermissionGraph {
   }
 
   /**
+   * Checks if the tree hasn't been filled with any thing
+   * @returns
+   */
+  protected isEmpty() {
+    return Object.keys(this.tree).length === 0;
+  }
+
+  /**
    * Transforms our tree into a graph
    *
    * @param tree
@@ -36,15 +44,23 @@ export class PermissionGraph {
     }
   }
 
-  protected isLeaf(value) {
+  protected isLeaf(value): boolean {
     return value === 1;
   }
 
-  public getSubRolesOf(role: string) {
+  public getSubRolesOf(role: string): string[] {
+    if (this.isEmpty()) {
+      return [];
+    }
+
     return this.graph.dependenciesOf(role);
   }
 
-  public getParentRolesOf(role: string | string[]) {
+  public getParentRolesOf(role: string | string[]): string[] {
+    if (this.isEmpty()) {
+      return [];
+    }
+
     if (Array.isArray(role)) {
       const roles = [];
       role.forEach((r) => {
