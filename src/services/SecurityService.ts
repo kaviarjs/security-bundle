@@ -237,6 +237,27 @@ export class SecurityService implements ISecurityService {
   }
 
   /**
+   * This function invalidates the previous token and retrieves a newly created one for it
+   * @param token
+   * @returns
+   */
+  async reissueSessionToken(token: string, expiresAt?: Date): Promise<string> {
+    const session = await this.sessionPersistanceLayer.getSession(token);
+
+    if (!session) {
+      throw new Error("Invalid token provided for reissuing session");
+    }
+
+    this.sessionPersistanceLayer.deleteSession(token);
+
+    return this.sessionPersistanceLayer.newSession(
+      session.userId,
+      expiresAt || session.expiresAt,
+      session.data
+    );
+  }
+
+  /**
    * Validates if the token is ok
    * @param session
    */
