@@ -15,7 +15,11 @@ import {
   IPermissionSearchFilter,
   IPermissionSearchFilters,
 } from "../defs";
-import { PERMISSION_PERSISTANCE_LAYER } from "../constants";
+import {
+  PERMISSION_DEFAULT_DOMAIN,
+  PERMISSION_PERSISTANCE_LAYER,
+} from "../constants";
+import { SecurityService } from "./SecurityService";
 
 @Service()
 export class PermissionService implements IPermissionService {
@@ -23,12 +27,13 @@ export class PermissionService implements IPermissionService {
     @Inject(PERMISSION_PERSISTANCE_LAYER)
     public readonly persistance: IPermissionPersistance,
     public readonly permissionGraph: PermissionGraph,
-    protected readonly eventManager: EventManager
+    protected readonly eventManager: EventManager,
+    protected readonly securityService: SecurityService
   ) {}
 
   async has(filter: IPermissionSearchFilter): Promise<boolean> {
     if (filter.userId === null || filter.userId === undefined) {
-      throw new Error(`UserId is required.`);
+      throw new Error(`Permission search filters: userId is missing.`);
     }
 
     const filters = this.transformToFilters(filter);
@@ -42,6 +47,18 @@ export class PermissionService implements IPermissionService {
       permissions.push(...parentPermissions);
     }
 
+    /**
+     * We treat roles as "app" level roles that are very simple to use.
+     */
+    if (filter.domain === PERMISSION_DEFAULT_DOMAIN) {
+      const roles = await this.securityService.getRoles(filter.userId);
+      if (roles) {
+        if (permissions.some((permission) => roles.includes(permission))) {
+          return true;
+        }
+      }
+    }
+
     const result = await this.persistance.countPermissions({
       userId: filters.userId,
       permission: permissions,
@@ -50,6 +67,19 @@ export class PermissionService implements IPermissionService {
     });
 
     return result > 0;
+  }
+
+  /**
+   * @param userId
+   * @param roles
+   * @returns
+   */
+  async hasRole(userId: unknown, roles: string | string[]): Promise<boolean> {
+    return this.has({
+      userId,
+      domain: PERMISSION_DEFAULT_DOMAIN,
+      permission: roles,
+    });
   }
 
   async add(permission: IPermission) {
@@ -112,10 +142,7 @@ export class PermissionService implements IPermissionService {
    * Prepares your easy search and transforms it so it reaches persistance layers properly
    * @param object
    */
-  protected transformToFilters(
-    object,
-    adaptToDefaultDomain: boolean = true
-  ): IPermissionSearchFilters {
+  protected transformToFilters(object): IPermissionSearchFilters {
     const newObject = {};
     ["userId", "permission", "domain", "domainIdentifier"].forEach((key) => {
       if (object[key]) {

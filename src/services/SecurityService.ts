@@ -382,4 +382,33 @@ export class SecurityService implements ISecurityService {
 
     return Boolean(user?.isEnabled);
   }
+
+  /**
+   * Retrieves the roles stored under `user.roles`
+   *
+   * @param userId
+   * @returns
+   */
+  async getRoles(userId): Promise<string[]> {
+    return (
+      (
+        await this.findUserById(userId, {
+          roles: 1,
+        })
+      ).roles || []
+    );
+  }
+
+  /**
+   * Sets the roles. Careful as it can override previous roles.
+   *
+   * @param userId
+   * @param roles
+   * @returns
+   */
+  async setRoles(userId, roles: string[]) {
+    return this.updateUser(userId, {
+      roles,
+    });
+  }
 }

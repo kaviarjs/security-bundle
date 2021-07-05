@@ -18,6 +18,7 @@ export interface IUser {
   isEnabled: boolean;
   createdAt: Date;
   lastLoginAt?: Date;
+  roles?: string[];
 }
 
 export interface IFieldMap {

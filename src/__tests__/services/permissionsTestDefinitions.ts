@@ -2,6 +2,7 @@ import { Permissions, PermissionTree } from "./mocks/permissionTree.mock";
 import { PermissionService, PermissionGraph, IPermissionService } from "../..";
 import { PermissionsPersistanceService } from "./mocks/PermissionsPersistanceService.mock";
 import { EventManager } from "@kaviar/core";
+import { SecurityService } from "../../services/SecurityService";
 
 const permission = new PermissionGraph(PermissionTree);
 const PERMISSION_DEFAULT_DOMAIN = "app";
@@ -13,7 +14,12 @@ export function permissionServiceCreator(): PermissionService {
   return new PermissionService(
     permissionPersistanceLayer,
     permission,
-    eventManager
+    eventManager,
+    ({
+      getRoles() {
+        return [Permissions.USER];
+      },
+    } as unknown) as SecurityService
   );
 }
 
@@ -200,6 +206,21 @@ export const permissionServiceTestDefinitions = [
       expect(domains).toHaveLength(2);
       expect(domains.includes("Legal")).toBe(true);
       expect(domains.includes("Health")).toBe(true);
+    },
+  },
+  {
+    message: "Should work with roles",
+    async test(service: PermissionService) {
+      expect(await service.hasRole("U1", Permissions.USER)).toBe(true);
+      expect(await service.hasRole("U1", Permissions.ADMIN)).toBe(false);
+
+      await service.add({
+        userId: "U1",
+        permission: Permissions.ADMIN,
+        domain: PERMISSION_DEFAULT_DOMAIN,
+      });
+
+      expect(await service.hasRole("U1", Permissions.USER)).toBe(true);
     },
   },
 ];

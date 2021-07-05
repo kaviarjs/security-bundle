@@ -21,4 +21,6 @@ export const PermissionTree: IPermissionTree = {
     [$.INVOICE_CREATE]: 1,
     [$.INVOICE_MARK_AS_PAID]: 1,
   },
+
+  [$.USER]: 1,
 };
